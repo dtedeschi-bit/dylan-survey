@@ -11,6 +11,9 @@ library(tidyverse)
 library(infer)
 library(googlesheets4)
 library(patchwork)
+library(car)
+library(estimability)
+library(multcomp)
 
 
 
@@ -34,83 +37,242 @@ stats_condensed_major$major[stats_condensed_major$major == "Physics-CS"|stats_co
 grad_vs_class = stats_condensed_major |> 
   ggplot(aes(x = class,
              y = grad_job_importance)) + 
-  geom_boxplot(outliers = FALSE) + 
+  geom_boxplot(outliers = FALSE,
+               fill = "black",
+               color = "grey12",
+               linewidth = 1) + 
   geom_point(aes(color = major),
              position = position_jitterdodge())+
   theme_classic()+
   scale_y_discrete(breaks = c(2,4,6,8,10),
                    labels = c("2","4","6","8","10"))+
+  scale_x_discrete(limits = c("Freshman",
+                              "Sophomore",
+                              "Junior",
+                              "Senior"))+
   labs(x = "Class", 
        y = "Importance ( 10 = high )", 
-       title = "How Important Future Career is by Class")
+       title = "How Important Future Career is by Class")+
+  theme(panel.background = element_rect(fill = "black"), 
+        plot.background = element_rect(fill = "black"),
+        axis.title = element_text(color = "white"),
+        axis.text = element_text(color = "white"),
+        plot.title = element_text(color = "white"),
+        legend.background = element_rect(fill = "black"),
+        legend.text = element_text(color = "white"),
+        legend.title = element_text(color = "white"))
 
 interest_vs_class = stats_condensed_major |> 
   ggplot(aes(x = class,
              y = interesting_material)) + 
-  geom_boxplot(outliers = FALSE) + 
+  geom_boxplot(outliers = FALSE,
+               fill = "black",
+               color = "grey12",
+               linewidth = 1) + 
   geom_point(aes(color = major),
              position = position_jitterdodge())+
   theme_classic()+
   scale_y_discrete(breaks = c(2,4,6,8,10),
                    labels = c("2","4","6","8","10"))+
+   scale_x_discrete(limits = c("Freshman",
+                              "Sophomore",
+                              "Junior",
+                              "Senior"))+
   labs(x = "Class", 
        y = "Importance ( 10 = high )", 
-       title = "How Important Interesting Material is by Class")
+       title = "How Important Interesting Material is by Class")+
+  theme(panel.background = element_rect(fill = "black"), 
+        plot.background = element_rect(fill = "black"),
+        axis.title = element_text(color = "white"),
+        axis.text = element_text(color = "white"),
+        plot.title = element_text(color = "white"),
+        legend.background = element_rect(fill = "black"),
+        legend.text = element_text(color = "white"),
+        legend.title = element_text(color = "white"))
 
 enjoyment_vs_class = stats_condensed_major |> 
   ggplot(aes(x = class,
              y = enjoy_college)) + 
-  geom_boxplot(outliers = FALSE) + 
+  geom_boxplot(outliers = FALSE,
+               fill = "black",
+               color = "grey12",
+               linewidth = 1) + 
   geom_point(aes(color = major),
              position = position_jitterdodge())+
   theme_classic()+
   scale_y_discrete(breaks = c(2,4,6,8,10),
                    labels = c("2","4","6","8","10"))+
+   scale_x_discrete(limits = c("Freshman",
+                              "Sophomore",
+                              "Junior",
+                              "Senior"))+
   labs(x = "Class", 
        y = "Importance ( 10 = high )", 
-       title = "How Important College Enjoyment is by Class")
+       title = "How Important College Enjoyment is by Class")+
+  theme(panel.background = element_rect(fill = "black"), 
+        plot.background = element_rect(fill = "black"),
+        axis.title = element_text(color = "white"),
+        axis.text = element_text(color = "white"),
+        plot.title = element_text(color = "white"),
+        legend.background = element_rect(fill = "black"),
+        legend.text = element_text(color = "white"),
+        legend.title = element_text(color = "white"))
 
 enjoyMUDD_vs_class = stats_condensed_major |> 
   ggplot(aes(x = class,
              y = grad_job_importance)) + 
-  geom_boxplot(outliers = FALSE) + 
+  geom_boxplot(outliers = FALSE,
+               fill = "black",
+               color = "grey12",
+               linewidth = 1) + 
   geom_point(aes(color = major),
              position = position_jitterdodge())+
   theme_classic()+
   scale_y_discrete(breaks = c(2,4,6,8,10),
                    labels = c("2","4","6","8","10"))+
+   scale_x_discrete(limits = c("Freshman",
+                              "Sophomore",
+                              "Junior",
+                              "Senior"))+
   labs(x = "Class", 
        y = "Importance ( 10 = high )", 
-       title = "How Much People Like Mudd by Class")
+       title = "How Much People Like Mudd by Class")+
+  theme(panel.background = element_rect(fill = "black"), 
+        plot.background = element_rect(fill = "black"),
+        axis.title = element_text(color = "white"),
+        axis.text = element_text(color = "white"),
+        plot.title = element_text(color = "white"),
+        legend.background = element_rect(fill = "black"),
+        legend.text = element_text(color = "white"),
+        legend.title = element_text(color = "white"))
 
 HC_vs_class = stats_condensed_major |> 
   ggplot(aes(x = class,
              y = honor_code_importance)) + 
-  geom_boxplot(outliers = FALSE) + 
+  geom_boxplot(outliers = FALSE,
+               fill = "black",
+               color = "grey12",
+               linewidth = 1) + 
   geom_point(aes(color = major),
              position = position_jitterdodge())+
   theme_classic()+
   scale_y_discrete(breaks = c(2,4,6,8,10),
                    labels = c("2","4","6","8","10"))+
+   scale_x_discrete(limits = c("Freshman",
+                              "Sophomore",
+                              "Junior",
+                              "Senior"))+
   labs(x = "Class", 
        y = "Importance ( 10 = high )", 
-       title = "How Important Honor Code is by Class")
+       title = "How Important Honor Code is by Class")+
+  theme(panel.background = element_rect(fill = "black"), 
+        plot.background = element_rect(fill = "black"),
+        axis.title = element_text(color = "white"),
+        axis.text = element_text(color = "white"),
+        plot.title = element_text(color = "white"),
+        legend.background = element_rect(fill = "black"),
+        legend.text = element_text(color = "white"),
+        legend.title = element_text(color = "white"))
 
 GPA_vs_class = stats_condensed_major |> 
   ggplot(aes(x = class,
              y = GPA_importance)) + 
-  geom_boxplot(outliers = FALSE) + 
+  geom_boxplot(outliers = FALSE,
+               fill = "black",
+               color = "grey12",
+               linewidth = 1) + 
   geom_point(aes(color = major),
              position = position_jitterdodge())+
   theme_classic()+
   scale_y_discrete(breaks = c(2,4,6,8,10),
                    labels = c("2","4","6","8","10"))+
+   scale_x_discrete(limits = c("Freshman",
+                              "Sophomore",
+                              "Junior",
+                              "Senior"))+
   labs(x = "Class", 
        y = "Importance ( 10 = high )", 
-       title = "How Important GPA is by Class")
+       title = "How Important GPA is by Class")+
+  theme(panel.background = element_rect(fill = "black"), 
+        plot.background = element_rect(fill = "black"),
+        axis.title = element_text(color = "white"),
+        axis.text = element_text(color = "white"),
+        plot.title = element_text(color = "white"),
+        legend.background = element_rect(fill = "black"),
+        legend.text = element_text(color = "white"),
+        legend.title = element_text(color = "white"))
 
 
 
 
 ```
+
+```{r}
+# let's now see if each of these questions are significantly different by class :
+
+
+obs_grad_stat = stats_condensed_major |> 
+  specify(grad_job_importance~class) |> 
+  hypothesise(null = "independence") |> 
+  calculate(stat = "F")
+  
+null_grad_stat = stats_condensed_major |> 
+  specify(grad_job_importance~class) |> 
+  hypothesise(null = "independence") |> 
+  generate(reps = 1000, type = "permute") |> 
+  calculate(stat = "F")
+  
+  
+visualize(null_grad_stat) + shade_p_value(obs_stat = obs_grad_stat,direction = "right")
+get_p_value(null_grad_stat, obs_stat = obs_grad_stat, direction = "right") # p = .33
+
+
+# stats for interest:
+
+obs_interest_stat = stats_condensed_major |> 
+  specify(interesting_material~class) |> 
+  hypothesise(null = "independence") |> 
+  calculate(stat = "F")
+  
+null_interest_stat = stats_condensed_major |> 
+  specify(interesting_material~class) |> 
+  hypothesise(null = "independence") |> 
+  generate(reps = 1000, type = "permute") |> 
+  calculate(stat = "F")
+  
+  
+visualize(null_interest_stat) + shade_p_value(obs_stat = obs_interest_stat,direction = "right")
+get_p_value(null_interest_stat, obs_stat = obs_interest_stat, direction = "right") #p = .162
+
+
+
+# stats for enjoyment:
+
+obs_enjoyment_stat = stats_condensed_major |> 
+  specify(enjoy_college~class) |> 
+  hypothesise(null = "independence") |> 
+  calculate(stat = "F")
+  
+null_enjoyment_stat = stats_condensed_major |> 
+  specify(enjoy_college~class) |> 
+  hypothesise(null = "independence") |> 
+  generate(reps = 1000, type = "permute") |> 
+  calculate(stat = "F")
+  
+  
+visualize(null_enjoyment_stat) + shade_p_value(obs_stat = obs_enjoyment_stat,direction = "right")
+get_p_value(null_enjoyment_stat, obs_stat = obs_enjoyment_stat, direction = "right") # p = .03
+
+#investigate further
+options(contrasts = c('contr.sum', 'contr.poly'))
+enjoyment_lm = lm(data = stats_condensed_major, formula = enjoy_college~class)
+enjoyment_anova = car::Anova(enjoyment_lm, type = 3)
+multcomp::glht(enjoyment_lm, linfct = mcp(class = "Tukey"))
+```
+
+
+
+
+
+
 
