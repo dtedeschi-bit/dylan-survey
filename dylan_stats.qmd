@@ -1,0 +1,116 @@
+---
+title: "Untitled"
+format: html
+editor: visual
+---
+
+```{r}
+
+
+library(tidyverse)
+library(infer)
+library(googlesheets4)
+library(patchwork)
+
+
+
+
+survey_stats = read_sheet("1lOjOhPeh4qqPBMC4nV7KXi0l73hdgoyUVs_J4-5yVXQ")
+
+stats_condensed_major = survey_stats
+
+stats_condensed_major$major[stats_condensed_major$major == "MCB"|stats_condensed_major$major == "Bio-Chem"] = "Bio"
+
+stats_condensed_major$major[stats_condensed_major$major == "Chem-Climate"|stats_condensed_major$major == "CS-Climate"|stats_condensed_major$major == "Math-Climate"] = "Climate"
+
+stats_condensed_major$major[stats_condensed_major$major == "Math-CS"] = "CS"
+
+stats_condensed_major$major[stats_condensed_major$major == "Physics-CS"|stats_condensed_major$major == "Math-Physics"] = "Physics"
+
+
+#let's visualize with the simplified majors for each question:
+
+
+grad_vs_class = stats_condensed_major |> 
+  ggplot(aes(x = class,
+             y = grad_job_importance)) + 
+  geom_boxplot(outliers = FALSE) + 
+  geom_point(aes(color = major),
+             position = position_jitterdodge())+
+  theme_classic()+
+  scale_y_discrete(breaks = c(2,4,6,8,10),
+                   labels = c("2","4","6","8","10"))+
+  labs(x = "Class", 
+       y = "Importance ( 10 = high )", 
+       title = "How Important Future Career is by Class")
+
+interest_vs_class = stats_condensed_major |> 
+  ggplot(aes(x = class,
+             y = interesting_material)) + 
+  geom_boxplot(outliers = FALSE) + 
+  geom_point(aes(color = major),
+             position = position_jitterdodge())+
+  theme_classic()+
+  scale_y_discrete(breaks = c(2,4,6,8,10),
+                   labels = c("2","4","6","8","10"))+
+  labs(x = "Class", 
+       y = "Importance ( 10 = high )", 
+       title = "How Important Interesting Material is by Class")
+
+enjoyment_vs_class = stats_condensed_major |> 
+  ggplot(aes(x = class,
+             y = enjoy_college)) + 
+  geom_boxplot(outliers = FALSE) + 
+  geom_point(aes(color = major),
+             position = position_jitterdodge())+
+  theme_classic()+
+  scale_y_discrete(breaks = c(2,4,6,8,10),
+                   labels = c("2","4","6","8","10"))+
+  labs(x = "Class", 
+       y = "Importance ( 10 = high )", 
+       title = "How Important College Enjoyment is by Class")
+
+enjoyMUDD_vs_class = stats_condensed_major |> 
+  ggplot(aes(x = class,
+             y = grad_job_importance)) + 
+  geom_boxplot(outliers = FALSE) + 
+  geom_point(aes(color = major),
+             position = position_jitterdodge())+
+  theme_classic()+
+  scale_y_discrete(breaks = c(2,4,6,8,10),
+                   labels = c("2","4","6","8","10"))+
+  labs(x = "Class", 
+       y = "Importance ( 10 = high )", 
+       title = "How Much People Like Mudd by Class")
+
+HC_vs_class = stats_condensed_major |> 
+  ggplot(aes(x = class,
+             y = honor_code_importance)) + 
+  geom_boxplot(outliers = FALSE) + 
+  geom_point(aes(color = major),
+             position = position_jitterdodge())+
+  theme_classic()+
+  scale_y_discrete(breaks = c(2,4,6,8,10),
+                   labels = c("2","4","6","8","10"))+
+  labs(x = "Class", 
+       y = "Importance ( 10 = high )", 
+       title = "How Important Honor Code is by Class")
+
+GPA_vs_class = stats_condensed_major |> 
+  ggplot(aes(x = class,
+             y = GPA_importance)) + 
+  geom_boxplot(outliers = FALSE) + 
+  geom_point(aes(color = major),
+             position = position_jitterdodge())+
+  theme_classic()+
+  scale_y_discrete(breaks = c(2,4,6,8,10),
+                   labels = c("2","4","6","8","10"))+
+  labs(x = "Class", 
+       y = "Importance ( 10 = high )", 
+       title = "How Important GPA is by Class")
+
+
+
+
+```
+
